@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "261666628805",
+    "project_id": "timetracking-87d90",
+    "storage_bucket": "timetracking-87d90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261666628805:android:06d684d0cf6fa682ecfcac",
+        "android_client_info": {
+          "package_name": "com.example.trackingtime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261666628805-24jl61jh8mr5fra9ma9r2c1ojrmnt834.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trackingtime",
+            "certificate_hash": "432e18cabfdcf01d629b3d42dc1905bbd324c9ad"
+          }
+        },
+        {
+          "client_id": "261666628805-bb4jheb0l7gv019a78utq6ir65371057.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQxb_7nrnvrL-rxStSbMR2Herb0P30nwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261666628805-bb4jheb0l7gv019a78utq6ir65371057.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
