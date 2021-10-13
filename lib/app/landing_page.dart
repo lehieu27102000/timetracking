@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:trackingtime/app/home/jobs_page.dart';
 import 'package:trackingtime/app/sign_in/sign_in_page.dart';
 import 'package:trackingtime/services/auth.dart';
+import 'package:trackingtime/services/database.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -17,7 +18,10 @@ class LandingPage extends StatelessWidget {
           if (user == null) {
             return SignInPage.create(context);
           }
-          return JobsPage();
+          return Provider<Database>(
+            create: (_) => FirestoreDatabase(uid: user.uid),
+            child: JobsPage(),
+          );
         }
         return Scaffold(
           body: Center(

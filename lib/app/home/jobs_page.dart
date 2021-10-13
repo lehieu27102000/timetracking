@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
 import 'package:trackingtime/services/auth.dart';
+import 'package:trackingtime/services/database.dart';
 
 
 
@@ -41,6 +43,18 @@ class JobsPage extends StatelessWidget {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _createJob(context),
+      ),
     );
+  }
+
+  Future <void> _createJob(BuildContext context) async {
+    final database = Provider.of<Database>(context, listen: false);
+    await database.createJob({
+      'name': 'blog',
+      'ratePerHour' : 10
+    });
   }
 }
