@@ -5,7 +5,7 @@ import 'package:trackingtime/services/auth.dart';
 
 
 
-class HomePage extends StatelessWidget {
+class JobsPage extends StatelessWidget {
   // const HomePage({Key? key, required this.auth}) : super(key: key);
   // final AuthBase auth;
   Future<void> _signOut(BuildContext context) async {
@@ -32,8 +32,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page', textAlign: TextAlign.center,),
+        title: Text('Jobs', textAlign: TextAlign.center,),
         actions: <Widget>[
+          // ignore: deprecated_member_use
           FlatButton(
               onPressed: () => _confirmSignOut(context),
               child: Text('Logout', style: TextStyle(fontSize: 18.0, color: Colors.white),)
