@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingtime/app/home/models/job.dart';
@@ -33,6 +34,8 @@ class JobsPage extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<Database>(context, listen: false);
+    // database.readJobs();
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobs', textAlign: TextAlign.center,),
@@ -44,6 +47,7 @@ class JobsPage extends StatelessWidget {
           )
         ],
       ),
+      body: _buidContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _createJob(context),
@@ -51,8 +55,32 @@ class JobsPage extends StatelessWidget {
     );
   }
 
+  Widget _buidContents(BuildContext context) {
+    final database = Provider.of<Database>(context,  listen: false);
+    return StreamBuilder<Iterable<Job>>(
+      stream: database.jobsStream(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          final jobs = snapshot.data;
+          final children  = jobs!.map((job) => Text('${job.name} ${job.ratePerHour}')).toList();
+          return ListView(children: children,);
+        }
+        return Center(child: CircularProgressIndicator(),);
+      }
+    );
+  }
+
   Future <void> _createJob(BuildContext context) async {
-    final database = Provider.of<Database>(context, listen: false);
-    await database.createJob(Job(name: 'blog', ratePerHour: 10));
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.createJob(Job(name: 'bloging', ratePerHour: 10));
+    } on FirebaseException catch(e) {
+      showAlertDialog(context, title:
+        'Tạo mới không thành công',
+        content: '',
+        activeDefaultText: 'ok',
+        cancelActiveText: null
+      );
+    }
   }
 }
