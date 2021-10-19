@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackingtime/app/home/jobs/add_job_page.dart';
 import 'package:trackingtime/app/home/models/job.dart';
 import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
 import 'package:trackingtime/services/auth.dart';
@@ -38,7 +39,8 @@ class JobsPage extends StatelessWidget {
     // database.readJobs();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Jobs', textAlign: TextAlign.center,),
+        title: Text('Jobs'),
+        centerTitle: true,
         actions: <Widget>[
           // ignore: deprecated_member_use
           FlatButton(
@@ -50,7 +52,7 @@ class JobsPage extends StatelessWidget {
       body: _buidContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createJob(context),
+        onPressed: () => AddJobPage.show(context),
       ),
     );
   }
