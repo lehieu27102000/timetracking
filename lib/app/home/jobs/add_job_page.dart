@@ -1,11 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trackingtime/app/home/models/job.dart';
+import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
+import 'package:trackingtime/services/database.dart';
 class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key}) : super(key: key);
+
+  final Database database;
+
+  const AddJobPage({Key? key, required this.database}) : super(key: key);
   static Future<void> show(BuildContext context) async {
+    final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AddJobPage(),
+        builder: (context) => AddJobPage(database: database,),
         fullscreenDialog: true
       )
     );
@@ -27,9 +36,24 @@ class _AddJobPageState extends State<AddJobPage> {
     }
     return false;
   }
-  void _submit() {
+  Future <void> _submit() async {
     if (_validateAndSaveForm()) {
-      print('form save name: $_name, ratePerHour: $_ratePerHour');
+      try {
+        final job = Job(
+            name: _name!,
+            ratePerHour: _ratePerHour!
+        );
+        await widget.database.createJob(job);
+        Navigator.of(context).pop();
+      } on FirebaseException catch (e) {
+        showAlertDialog(
+            context,
+            title: 'Create faild',
+            content: e.toString(),
+            activeDefaultText: 'OK',
+            cancelActiveText: ''
+        );
+      }
     }
   }
   @override

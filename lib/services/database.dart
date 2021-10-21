@@ -7,12 +7,12 @@ abstract class Database {
   Future <void> createJob(Job job);
   Stream <Iterable<Job>> jobsStream();
 }
-
+String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 class FirestoreDatabase implements Database {
   FirestoreDatabase({required this.uid}) : assert(uid != null);
   final String uid;
   Future <void> createJob(Job job) => _setData(
-    path: APIPath.job(uid, 'job_123'),
+    path: APIPath.job(uid, documentIdFromCurrentDate()),
     data: job.toMap()
   );
 
