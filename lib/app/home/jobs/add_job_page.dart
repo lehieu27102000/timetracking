@@ -39,6 +39,17 @@ class _AddJobPageState extends State<AddJobPage> {
   Future <void> _submit() async {
     if (_validateAndSaveForm()) {
       try {
+        final jobs = await widget.database.jobsStream().first;
+        final allName = jobs.map((job) => job.name).toList();
+        if (allName.contains(_name)) {
+          showAlertDialog(
+              context,
+              title: 'Create faild',
+              content: 'Please choose a different job name',
+              activeDefaultText: 'OK',
+              cancelActiveText: ''
+          );
+        }
         final job = Job(
             name: _name!,
             ratePerHour: _ratePerHour!
@@ -112,7 +123,7 @@ class _AddJobPageState extends State<AddJobPage> {
           signed: false,
           decimal: false
         ),
-        onSaved: (value) => _ratePerHour = int.parse(value!),
+        onSaved: (value) => _ratePerHour = int.tryParse(value!) ?? 0,
         onEditingComplete: _submit,
       )
     ];

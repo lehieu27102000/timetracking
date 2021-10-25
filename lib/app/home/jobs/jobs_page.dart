@@ -1,8 +1,7 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingtime/app/home/jobs/add_job_page.dart';
+import 'package:trackingtime/app/home/jobs/job_list_title.dart';
 import 'package:trackingtime/app/home/models/job.dart';
 import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
 import 'package:trackingtime/services/auth.dart';
@@ -64,7 +63,9 @@ class JobsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.data != null) {
           final jobs = snapshot.data;
-          final children  = jobs!.map((job) => Text('${job.name} ${job.ratePerHour}')).toList();
+          final children  = jobs!.map((job) => JobListTitle(job: job, onTap: () {
+            print('hieu');
+          })).toList();
           return ListView(children: children,);
         }
         return Center(child: CircularProgressIndicator(),);
@@ -72,17 +73,4 @@ class JobsPage extends StatelessWidget {
     );
   }
 
-  Future <void> _createJob(BuildContext context) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.createJob(Job(name: 'bloging', ratePerHour: 10));
-    } on FirebaseException catch(e) {
-      showAlertDialog(context, title:
-        'Tạo mới không thành công',
-        content: '',
-        activeDefaultText: 'ok',
-        cancelActiveText: null
-      );
-    }
-  }
 }
