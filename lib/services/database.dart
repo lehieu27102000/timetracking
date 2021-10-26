@@ -12,7 +12,7 @@ class FirestoreDatabase implements Database {
   FirestoreDatabase({required this.uid}) : assert(uid != null);
   final String uid;
   Future <void> createJob(Job job) => _setData(
-    path: APIPath.job(uid, documentIdFromCurrentDate()),
+    path: APIPath.job(uid, job.id),
     data: job.toMap()
   );
 
@@ -20,7 +20,7 @@ class FirestoreDatabase implements Database {
     final path = APIPath.jobs(uid);
     final reference = FirebaseFirestore.instance.collection(path);
     final snapshots = reference.snapshots();
-    return snapshots.map((snapshot) => snapshot.docs.map((snapshot) => Job.fromMap(snapshot.data()),
+    return snapshots.map((snapshot) => snapshot.docs.map((snapshot) => Job.fromMap(snapshot.data(), snapshot.id),
     ));
   }
 
