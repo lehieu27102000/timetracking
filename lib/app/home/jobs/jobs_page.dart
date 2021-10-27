@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingtime/app/home/jobs/add_job_page.dart';
+import 'package:trackingtime/app/home/jobs/empty_content.dart';
 import 'package:trackingtime/app/home/jobs/job_list_title.dart';
 import 'package:trackingtime/app/home/models/job.dart';
 import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
@@ -65,8 +66,11 @@ class JobsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.data != null) {
           final jobs = snapshot.data;
-          final children  = jobs!.map((job) => JobListTitle(job: job, onTap: () => EditJobPage.show(context, job: job))).toList();
-          return ListView(children: children,);
+          if (jobs!.isNotEmpty) {
+            final children  = jobs.map((job) => JobListTitle(job: job, onTap: () => EditJobPage.show(context, job: job))).toList();
+            return ListView(children: children,);
+          }
+          return EmptyContent();
         }
         return Center(child: CircularProgressIndicator(),);
       }

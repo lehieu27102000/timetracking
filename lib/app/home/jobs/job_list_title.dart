@@ -8,6 +8,7 @@ class JobListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(job.name),
+      subtitle: Text('${job.ratePerHour}' + ' minute'),
       trailing: Icon(Icons.chevron_right),
       onTap: onTap,
     );
