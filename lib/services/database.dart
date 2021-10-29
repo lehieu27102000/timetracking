@@ -5,7 +5,7 @@ import 'package:trackingtime/services/api_path.dart';
 
 abstract class Database {
   Future <void> createJob(Job job);
-  Stream <Iterable<Job>> jobsStream();
+  Stream <List<Job>> jobsStream();
 }
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 class FirestoreDatabase implements Database {
@@ -16,12 +16,11 @@ class FirestoreDatabase implements Database {
     data: job.toMap()
   );
 
-  Stream <Iterable<Job>> jobsStream() {
+  Stream <List<Job>> jobsStream() {
     final path = APIPath.jobs(uid);
     final reference = FirebaseFirestore.instance.collection(path);
     final snapshots = reference.snapshots();
-    return snapshots.map((snapshot) => snapshot.docs.map((snapshot) => Job.fromMap(snapshot.data(), snapshot.id),
-    ));
+    return snapshots.map((snapshot) => snapshot.docs.map((snapshot) => Job.fromMap(snapshot.data(), snapshot.id),).toList());
   }
 
   Future<void> _setData({String? path, Map<String, dynamic>? data}) async {

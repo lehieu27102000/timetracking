@@ -2,13 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingtime/app/home/jobs/add_job_page.dart';
-import 'package:trackingtime/app/home/jobs/empty_content.dart';
+import 'package:trackingtime/app/home/jobs/edit_job_page.dart';
 import 'package:trackingtime/app/home/jobs/job_list_title.dart';
+import 'package:trackingtime/app/home/jobs/list_item_builder.dart';
 import 'package:trackingtime/app/home/models/job.dart';
 import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
 import 'package:trackingtime/services/auth.dart';
 import 'package:trackingtime/services/database.dart';
-import 'edit_job_page.dart';
+
+import 'empty_content.dart';
 
 
 
@@ -38,7 +40,6 @@ class JobsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
-    // database.readJobs();
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobs'),
@@ -61,18 +62,26 @@ class JobsPage extends StatelessWidget {
 
   Widget _buidContents(BuildContext context) {
     final database = Provider.of<Database>(context,  listen: false);
-    return StreamBuilder<Iterable<Job>>(
+    return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
+      // builder: (context, snapshot) {
+      //   if (snapshot.data != null) {
+      //     final jobs = snapshot.data;
+      //     if (jobs!.isNotEmpty) {
+      //       final children  = jobs.map((job) => JobListTitle(job: job, onTap: () => EditJobPage.show(context, job: job))).toList();
+      //       return ListView(children: children,);
+      //     }
+      //     return EmptyContent();
+      //   }
+      //   return Center(child: CircularProgressIndicator(),);
       builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          final jobs = snapshot.data;
-          if (jobs!.isNotEmpty) {
-            final children  = jobs.map((job) => JobListTitle(job: job, onTap: () => EditJobPage.show(context, job: job))).toList();
-            return ListView(children: children,);
-          }
-          return EmptyContent();
-        }
-        return Center(child: CircularProgressIndicator(),);
+        return ListItemBuilder<Job>(
+            snapshot: snapshot,
+            itemBuilder: (context, job) => JobListTitle(
+                job: job,
+                onTap: () => EditJobPage(database: database, job: job)
+            )
+        );
       }
     );
   }
