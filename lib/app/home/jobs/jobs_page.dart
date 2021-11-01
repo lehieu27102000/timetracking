@@ -59,6 +59,19 @@ class JobsPage extends StatelessWidget {
       ),
     );
   }
+  Future<void> _delete(BuildContext context, Job job) async {
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.deleteJob(job);
+    } on FirestoreDatabase catch(e) {
+      showAlertDialog(context,
+        title: 'delete faild',
+        content: e.toString(),
+        activeDefaultText: 'OK',
+        cancelActiveText: ''
+      );
+    }
+  }
 
   Widget _buidContents(BuildContext context) {
     final database = Provider.of<Database>(context,  listen: false);
@@ -77,10 +90,16 @@ class JobsPage extends StatelessWidget {
       builder: (context, snapshot) {
         return ListItemBuilder<Job>(
             snapshot: snapshot,
-            itemBuilder: (context, job) => JobListTitle(
+            itemBuilder: (context, job) => Dismissible (
+                key: Key('job-${job.id}'),
+                background: Container(color: Colors.red,),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) => _delete(context, job),
+                child: JobListTitle(
                 job: job,
-                onTap: () => EditJobPage(database: database, job: job)
+                onTap: () => EditJobPage.show(context, job: job)
             )
+          )
         );
       }
     );

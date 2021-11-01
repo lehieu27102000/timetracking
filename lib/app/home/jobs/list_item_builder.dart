@@ -30,9 +30,16 @@ class ListItemBuilder<T> extends StatelessWidget {
     return Center(child: CircularProgressIndicator());
   }
   Widget _buildList(List<T> items) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) => itemBuilder(context, items[index]),);
-    return Container();
+    return ListView.separated(
+      itemCount: items.length + 2,
+      separatorBuilder: (context, index) => Divider(height: 0.7,),
+      itemBuilder: (context, index) {
+        if (index == 0 || index == items.length + 1) {
+          return Container();
+        }
+        return itemBuilder(context, items[index - 1]);
+      }
+    );
+    // return Container();
   }
 }
