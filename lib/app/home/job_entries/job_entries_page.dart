@@ -1,21 +1,20 @@
 import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/entry_list_item.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/entry_page.dart';
-import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
-import 'package:time_tracker_flutter_course/app/home/jobs/list_items_builder.dart';
-import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
-import 'package:time_tracker_flutter_course/app/home/models/job.dart';
-import 'package:time_tracker_flutter_course/common_widgets/show_exception_alert_dialog.dart';
-import 'package:time_tracker_flutter_course/services/database.dart';
+import 'package:trackingtime/app/home/job_entries/entry_list_item.dart';
+import 'package:trackingtime/app/home/job_entries/entry_page.dart';
+import 'package:trackingtime/app/home/jobs/edit_job_page.dart';
+import 'package:trackingtime/app/home/jobs/list_item_builder.dart';
+import 'package:trackingtime/app/home/models/entry.dart';
+import 'package:trackingtime/app/home/models/job.dart';
+import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
+import 'package:trackingtime/services/database.dart';
 
 class JobEntriesPage extends StatelessWidget {
-  const JobEntriesPage({@required this.database, @required this.job});
+  const JobEntriesPage({required this.database, required this.job});
   final Database database;
   final Job job;
 
@@ -33,11 +32,16 @@ class JobEntriesPage extends StatelessWidget {
     try {
       await database.deleteEntry(entry);
     } on FirebaseException catch (e) {
-      showExceptionAlertDialog(
-        context,
-        title: 'Operation failed',
-        exception: e,
-      );
+      // showExceptionAlertDialog(
+      //   context,
+      //   title: 'Operation failed',
+      //   exception: e,
+      // );
+      showAlertDialog(context,
+          title: 'Operation failed',
+          content: e.toString(),
+          activeDefaultText: 'OK',
+          cancelActiveText: '');
     }
   }
 
@@ -70,7 +74,7 @@ class JobEntriesPage extends StatelessWidget {
     return StreamBuilder<List<Entry>>(
       stream: database.entriesStream(job: job),
       builder: (context, snapshot) {
-        return ListItemsBuilder<Entry>(
+        return ListItemBuilder<Entry>(
           snapshot: snapshot,
           itemBuilder: (context, entry) {
             return DismissibleEntryListItem(

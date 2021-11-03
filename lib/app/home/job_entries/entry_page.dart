@@ -1,26 +1,27 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/date_time_picker.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/format.dart';
-import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
-import 'package:time_tracker_flutter_course/app/home/models/job.dart';
-import 'package:time_tracker_flutter_course/common_widgets/show_exception_alert_dialog.dart';
-import 'package:time_tracker_flutter_course/services/database.dart';
+import 'package:trackingtime/app/home/job_entries/date_time_picker.dart';
+import 'package:trackingtime/app/home/job_entries/format.dart';
+import 'package:trackingtime/app/home/models/entry.dart';
+import 'package:trackingtime/app/home/models/job.dart';
+import 'package:trackingtime/common_widgets/show_alert_dialog.dart';
+import 'package:trackingtime/services/database.dart';
 
 class EntryPage extends StatefulWidget {
-  const EntryPage({@required this.database, @required this.job, this.entry});
+  const EntryPage({required this.database, required this.job, required this.entry});
   final Database database;
   final Job job;
   final Entry entry;
 
   static Future<void> show(
-      {BuildContext context, Database database, Job job, Entry entry}) async {
-    await Navigator.of(context).push(
+      {BuildContext? context, Database? database, Job? job, Entry? entry}) async {
+    await Navigator.of(context!).push(
       MaterialPageRoute(
         builder: (context) =>
-            EntryPage(database: database, job: job, entry: entry),
+            EntryPage(database: database!, job: job!, entry: entry!),
         fullscreenDialog: true,
       ),
     );
@@ -31,11 +32,11 @@ class EntryPage extends StatefulWidget {
 }
 
 class _EntryPageState extends State<EntryPage> {
-  DateTime _startDate;
-  TimeOfDay _startTime;
-  DateTime _endDate;
-  TimeOfDay _endTime;
-  String _comment;
+  DateTime? _startDate;
+  TimeOfDay? _startTime;
+  DateTime? _endDate;
+  TimeOfDay? _endTime;
+  String? _comment;
 
   @override
   void initState() {
@@ -52,31 +53,30 @@ class _EntryPageState extends State<EntryPage> {
   }
 
   Entry _entryFromState() {
-    final start = DateTime(_startDate.year, _startDate.month, _startDate.day,
-        _startTime.hour, _startTime.minute);
-    final end = DateTime(_endDate.year, _endDate.month, _endDate.day,
-        _endTime.hour, _endTime.minute);
+    final start = DateTime(_startDate!.year, _startDate!.month, _startDate!.day,
+        _startTime!.hour, _startTime!.minute);
+    final end = DateTime(_endDate!.year, _endDate!.month, _endDate!.day,
+        _endTime!.hour, _endTime!.minute);
     final id = widget.entry?.id ?? documentIdFromCurrentDate();
     return Entry(
       id: id,
       jobId: widget.job.id,
       start: start,
       end: end,
-      comment: _comment,
+      comment: _comment!,
     );
   }
 
   Future<void> _setEntryAndDismiss(BuildContext context) async {
     try {
       final entry = _entryFromState();
-      await widget.database.setEntry(entry);
+      await widget.database.createEntry(entry);
       Navigator.of(context).pop();
     } on FirebaseException catch (e) {
-      showExceptionAlertDialog(
-        context,
-        title: 'Operation failed',
-        exception: e,
-      );
+      showAlertDialog(context, title: 'Error',
+          content: e.toString(),
+          activeDefaultText: 'OK',
+          cancelActiveText: '');
     }
   }
 
@@ -119,8 +119,8 @@ class _EntryPageState extends State<EntryPage> {
   Widget _buildStartDate() {
     return DateTimePicker(
       labelText: 'Start',
-      selectedDate: _startDate,
-      selectedTime: _startTime,
+      selectedDate: _startDate!,
+      selectedTime: _startTime!,
       selectDate: (date) => setState(() => _startDate = date),
       selectTime: (time) => setState(() => _startTime = time),
     );
@@ -129,8 +129,8 @@ class _EntryPageState extends State<EntryPage> {
   Widget _buildEndDate() {
     return DateTimePicker(
       labelText: 'End',
-      selectedDate: _endDate,
-      selectedTime: _endTime,
+      selectedDate: _endDate!,
+      selectedTime: _endTime!,
       selectDate: (date) => setState(() => _endDate = date),
       selectTime: (time) => setState(() => _endTime = time),
     );

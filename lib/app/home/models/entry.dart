@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Entry {
   Entry({
     required this.id,
@@ -9,16 +7,16 @@ class Entry {
     required this.comment,
   });
 
-  String id;
-  String jobId;
-  DateTime start;
-  DateTime end;
-  String comment;
+  final String id;
+  final String jobId;
+  final DateTime start;
+  final DateTime end;
+  final String comment;
 
   double get durationInHours =>
       end.difference(start).inMinutes.toDouble() / 60.0;
 
-  factory Entry.fromMap(Map<dynamic, dynamic> value, String id) {
+  factory Entry.fromMap(Map<String, dynamic> value, String id) {
     final int startMilliseconds = value['start'];
     final int endMilliseconds = value['end'];
     return Entry(
@@ -31,7 +29,7 @@ class Entry {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'jobId': jobId,
       'start': start.millisecondsSinceEpoch,
       'end': end.millisecondsSinceEpoch,

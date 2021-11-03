@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/format.dart';
-import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
-import 'package:time_tracker_flutter_course/app/home/models/job.dart';
+import 'package:trackingtime/app/home/models/entry.dart';
+import 'package:trackingtime/app/home/models/job.dart';
+
+import 'format.dart';
 
 class EntryListItem extends StatelessWidget {
   const EntryListItem({
-    @required this.entry,
-    @required this.job,
-    @required this.onTap,
+    required this.entry,
+    required this.job,
+    required this.onTap,
   });
 
   final Entry entry;
@@ -76,11 +77,11 @@ class EntryListItem extends StatelessWidget {
 
 class DismissibleEntryListItem extends StatelessWidget {
   const DismissibleEntryListItem({
-    this.key,
-    this.entry,
-    this.job,
-    this.onDismissed,
-    this.onTap,
+    required this.key,
+    required this.entry,
+    required this.job,
+    required this.onDismissed,
+    required this.onTap,
   });
 
   final Key key;
